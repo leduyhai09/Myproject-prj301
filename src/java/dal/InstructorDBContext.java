@@ -244,14 +244,16 @@ public class InstructorDBContext extends DBContext {
 
     public List<Session> getListSessionStudent(String account, Date from, Date to) {
         List<Session> listTimeStudent = new ArrayList<>();
-        String sql = "select Session.date,Session.RoomId, Session.AttentID,Classs.classId, Session.SlotId,Session.studentId from Session\n"
+        String sql = "select  Session.date, Session.RoomId,Session.AttentID,Session.SlotId, Session.ClassId from Session\n"
+                + "join Attendance\n"
+                + "on Session.AttentID = Attendance.ID\n"
                 + "join Student\n"
-                + "on Student.StudentId = Session.studentId\n"
+                + "on Student.StudentId = Attendance.StudentId\n"
                 + "join Classs\n"
-                + "on Classs.ClassId = Session.ClassId\n"
+                + "on Session.ClassId = Classs.ClassId\n"
                 + "join Course\n"
-                + "on Classs.CourseId = Course.CourseId\n"
-                + "where Student.userName =? and Session.date >= ? and  Session.date <= ?";
+                + "on Course.CourseId = Classs.CourseId\n"
+                + "where Student.userName = ? and Session.date >=? and Session.date <= ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, account);
@@ -271,6 +273,31 @@ public class InstructorDBContext extends DBContext {
             Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return listTimeStudent;
+    }
+
+    public List<Session> getListAttendance() {
+            List<Session> listAttendance = new ArrayList<>();
+            String sql = "select Session.ClassId,Session.AttentID from instructor\n"
+                    + "join Session\n"
+                    + "on instructor.instructorId = Session.instructorId\n"
+                    + "join Attendance\n"
+                    + "on Session.AttentID = Attendance.ID\n"
+                    + "join Student\n"
+                    + "on Student.StudentId = Attendance.StudentId\n"
+                    + "where instructor.instructorId = ? and Session.SlotId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()){
+                Session s = new Session();
+                s.setClassId(getClassById(rs.getInt("ClassId")));
+                s.setAttentId(getAttendanceById(rs.getInt("AttentID")));
+                listAttendance.add(s);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            return listAttendance;
     }
 
 }

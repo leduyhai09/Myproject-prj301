@@ -3,15 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/PRJ_BTVN/MyProject/web/viewInstructor/instructor.jsp</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/src/java/controller/timeTable/TimeTableInstructor.java</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/web/viewInstructor/timeofinstructor.jsp</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/src/java/controller/attendance/Attendance.java</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/web/authentication/login.jsp</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/web/view/timetablestudent.jsp</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/src/java/model/Session.java</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/web/viewInstructor/attendance.jsp</file>
-            <file>file:/D:/PRJ_BTVN/MyProject/web/view/student.jsp</file>
+            <file>file:/D:/PRJ_BTVN/MyProject/src/java/dal/DBContext.java</file>
+            <file>file:/D:/PRJ_BTVN/MyProject/test/test.java</file>
             <file>file:/D:/PRJ_BTVN/MyProject/src/java/dal/InstructorDBContext.java</file>
         </group>
     </open-files>

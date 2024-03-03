@@ -1,6 +1,6 @@
-                                            c <%-- 
+<%-- 
     Document   : attendance
-    Created on : Mar 1, 2024, 1:03:34 PM
+    Created on : Mar 3, 2024, 11:24:22 PM
     Author     : ADMIN
 --%>
 
@@ -12,16 +12,24 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Check attendent</h1>
+         <h1>Check attendent</h1>
         <table border="">
             <tr>
-                <th>No</th>
                 <th>Class</th>
                 <th>StudentID</th>
                 <th>Name</th>
                 <th>Attendance Status</th>
                 <th>Description</th>
             </tr>
-        </table>
+            <tr>
+                <c:forEach items="${requestScope.list}" var="s">
+                <td>${s.classId.className}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </c:forEach>
+            
+               </tr> 
     </body>
 </html>

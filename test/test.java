@@ -4,6 +4,8 @@ import dal.AccountDBContext;
 import dal.InstructorDBContext;
 import java.util.List;
 import model.Account;
+import model.Attendance;
+import model.Classs;
 import model.Course;
 import model.Instructor;
 import model.Room;
@@ -25,12 +27,22 @@ public class test {
         InstructorDBContext idbc = new InstructorDBContext();
 //        TimeSlot s = idbc.getSlotById(1);
 //        System.out.println(s.getTname());
-       
-
-       List<Session> sessions = idbc.getSessions("sonnt5", java.sql.Date.valueOf("2024-01-15"),  java.sql.Date.valueOf("2024-03-30"));
+//        Classs s  = idbc.getClassById(1);
+//        System.out.println(s.getClassName());
+//
+//       List<Attendance> a = idbc.getListSessionStudent("leduyhai", java.sql.Date.valueOf("2024-01-15"),  java.sql.Date.valueOf("2024-03-30"));
+//        for (Attendance attendance : a) {
+//            System.out.println(attendance.getSessionId().getClassId().getClassName());
+//        }
+        List<Session> sessions = idbc.getSessions("sonnt5", java.sql.Date.valueOf("2024-02-28"),  java.sql.Date.valueOf("2024-02-29"));
         for (Session session : sessions) {
-            System.out.println(session.getDate());
+            System.out.println(session.getStatus());
+        }
+        List<Attendance> a = idbc.getAttendancesList("sonnt5",1,"2024-02-28");
+        for (Attendance attendance : a) {
+            System.out.println(attendance.getSessionId().getClassId().getClassName());
         }
 //    }
-    }}
+    }
+}
 

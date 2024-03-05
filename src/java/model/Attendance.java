@@ -11,11 +11,13 @@ import java.util.Date;
  * @author ADMIN
  */
 public class Attendance {
+
     private int attentId;
     private String status;
     private String comment;
     private Student studentId;
-   
+    private Session sessionId;
+    
     public Attendance() {
     }
 
@@ -32,7 +34,6 @@ public class Attendance {
     public void setAttentId(int attentId) {
         this.attentId = attentId;
     }
-
 
     public String getStatus() {
         return status;
@@ -58,7 +59,12 @@ public class Attendance {
         this.studentId = studentId;
     }
 
-    
+    public Session getSessionId() {
+        return sessionId;
+    }
 
-    
+    public void setSessionId(Session sessionId) {
+        this.sessionId = sessionId;
+    }
+
 }

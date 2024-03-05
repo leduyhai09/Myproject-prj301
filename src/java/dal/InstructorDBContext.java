@@ -124,6 +124,28 @@ public class InstructorDBContext extends DBContext {
         return null;
     }
 
+    public Session getSessionById(int sessionId) {
+        try {
+            String sql = "select * from Session\n"
+                    + "where Session.SessionId = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, sessionId);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Session s = new Session();
+                s.setSessionId(rs.getInt("SessionId"));
+                s.setRoomId(getRoomById(rs.getInt("RoomId")));
+                s.setClassId(getClassById(rs.getInt("ClassId")));
+                s.setSlotId(getSlotById(rs.getInt("SlotId")));
+                s.setDate(rs.getDate("date"));
+                return s;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public Attendance getAttendanceById(int id) {
         try {
             String sql = "select * from Attendance\n"
@@ -136,6 +158,8 @@ public class InstructorDBContext extends DBContext {
                 a.setAttentId(rs.getInt("ID"));
                 a.setStatus(rs.getNString("Status"));
                 a.setComment(rs.getString("Comment"));
+                a.setStudentId(getStudentById(rs.getString("StudentId")));
+                a.setSessionId(getSessionById(rs.getInt("sessionId")));
                 return a;
             }
         } catch (SQLException ex) {
@@ -208,17 +232,15 @@ public class InstructorDBContext extends DBContext {
     }
 
     public List<Session> getSessions(String username, Date from, Date to) {
-        List<Session> sessions = new ArrayList<>();
-        String sql = "select session.date,Classs.ClassId, Session.RoomId, Session.AttentID , Session.instructorId,Session.SlotId  from Session\n"
-                + "join Attendance\n"
-                + "on Session.AttentID = Attendance.ID\n"
-                + "join Classs\n"
-                + "on Session.ClassId = Classs.ClassId\n"
-                + "join instructor\n"
-                + "on Session.instructorId = instructor.instructorId\n"
-                + "join Student\n"
-                + "on Student.StudentId = Attendance.StudentId\n"
-                + "where instructor.userName = ? and Session.date >= ? and Session.date <= ? ";
+        List<Session> attaList = new ArrayList<>();
+        String sql = "  select distinct session.SessionId, session.date,Session.ClassId, Session.RoomId, Session.instructorId,Session.SlotId, Session.Status  from Session\n"
+                + "                             join Classs\n"
+                + "                     on Session.ClassId = Classs.ClassId\n"
+                + "                               join instructor\n"
+                + "                             on Session.instructorId = instructor.instructorId\n"
+                + "							 join Attendance\n"
+                + "							 on Attendance.sessionId = Session.SessionId\n"
+                + "                              where instructor.userName = ? and Session.date >= ? and  Session.date <= ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, username);
@@ -226,34 +248,36 @@ public class InstructorDBContext extends DBContext {
             stm.setDate(3, to);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Session s = new Session();
-                s.setDate(rs.getDate("date"));
-                s.setInstructorId(getInstructorById(rs.getInt("instructorId")));
-                s.setClassId(getClassById(rs.getInt("ClassId")));
-                s.setRoomId(getRoomById(rs.getInt("RoomId")));
-                s.setAttentId(getAttendanceById(rs.getInt("AttentID")));
-                s.setSlotId(getSlotById(rs.getInt("SlotId")));
-                sessions.add(s);
+                Session a = new Session();
+                a.setSessionId(rs.getInt("SessionId"));
+                a.setDate(rs.getDate("date"));
+                a.setStatus(rs.getString("Status"));
+                a.setClassId(getClassById(rs.getInt("ClassId")));
+                a.setRoomId(getRoomById(rs.getInt("RoomId")));
+                a.setInstructorId(getInstructorById(rs.getInt("instructorId")));
+                a.setSlotId(getSlotById(rs.getInt("SlotId")));
+
+                attaList.add(a);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return sessions;
+        return attaList;
     }
 
-    public List<Session> getListSessionStudent(String account, Date from, Date to) {
-        List<Session> listTimeStudent = new ArrayList<>();
-        String sql = "select  Session.date, Session.RoomId,Session.AttentID,Session.SlotId, Session.ClassId from Session\n"
-                + "join Attendance\n"
-                + "on Session.AttentID = Attendance.ID\n"
-                + "join Student\n"
-                + "on Student.StudentId = Attendance.StudentId\n"
-                + "join Classs\n"
-                + "on Session.ClassId = Classs.ClassId\n"
-                + "join Course\n"
-                + "on Course.CourseId = Classs.CourseId\n"
-                + "where Student.userName = ? and Session.date >=? and Session.date <= ?";
+    public List<Attendance> getListSessionStudent(String account, Date from, Date to) {
+        List<Attendance> listTimeStudent = new ArrayList<>();
+        String sql = "select  Session.date, Attendance.ID ,attendance.status, Attendance.sessionId from Session\n"
+                + "                join Student\n"
+                + "                on Student.StudentId = Session.studentId\n"
+                + "                join Classs\n"
+                + "                on Session.ClassId = Classs.ClassId\n"
+                + "               join Course\n"
+                + "                on Course.CourseId = Classs.CourseId\n"
+                + "				join Attendance\n"
+                + "				on Attendance.sessionId = Session.SessionId\n"
+                + "                where Student.userName = ? and Session.date >=? and Session.date <= ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, account);
@@ -261,13 +285,12 @@ public class InstructorDBContext extends DBContext {
             stm.setDate(3, to);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Session s = new Session();
-                s.setDate(rs.getDate("date"));
-                s.setClassId(getClassById(rs.getInt("ClassId")));
-                s.setAttentId(getAttendanceById(rs.getInt("AttentID")));
-                s.setSlotId(getSlotById(rs.getInt("SlotId")));
-                s.setRoomId(getRoomById(rs.getInt("RoomId")));
-                listTimeStudent.add(s);
+                Attendance a = new Attendance();
+                a.setAttentId(rs.getInt("ID"));
+                a.setStatus(rs.getString("status"));
+                a.setSessionId(getSessionById(rs.getInt("sessionId")));
+
+                listTimeStudent.add(a);
             }
         } catch (SQLException ex) {
             Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -275,29 +298,62 @@ public class InstructorDBContext extends DBContext {
         return listTimeStudent;
     }
 
-    public List<Session> getListAttendance() {
-            List<Session> listAttendance = new ArrayList<>();
-            String sql = "select Session.ClassId,Session.AttentID from instructor\n"
-                    + "join Session\n"
-                    + "on instructor.instructorId = Session.instructorId\n"
-                    + "join Attendance\n"
-                    + "on Session.AttentID = Attendance.ID\n"
-                    + "join Student\n"
-                    + "on Student.StudentId = Attendance.StudentId\n"
-                    + "where instructor.instructorId = ? and Session.SlotId = ?";
+    public List<Attendance> getAttendancesList(String username, int slotId, String date) {
+        List<Attendance> lista = new ArrayList<>();
+        String sql = "select Attendance.sessionId, Attendance.ID, Attendance.Status, Attendance.comment ,Attendance.StudentId  from Attendance\n"
+                + "                 join Session\n"
+                + "                on Attendance.sessionId = Session.SessionId\n"
+                + "                join instructor\n"
+                + "                on instructor.instructorId = Session.instructorId\n"
+                + "                where instructor.userName = ? and Session.SlotId=? and Session.date = ?";
         try {
-            PreparedStatement stm = connection.prepareStatement(sql);
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, username);
+            stm.setInt(2, slotId);
+            stm.setString(3, date);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()){
-                Session s = new Session();
-                s.setClassId(getClassById(rs.getInt("ClassId")));
-                s.setAttentId(getAttendanceById(rs.getInt("AttentID")));
-                listAttendance.add(s);
+            while (rs.next()) {
+                Attendance a = new Attendance();
+                a.setSessionId(getSessionById(rs.getInt("sessionId")));
+                a.setAttentId(rs.getInt("ID"));
+                a.setStatus(rs.getString("Status"));
+                a.setComment(rs.getString("comment"));
+                a.setStudentId(getStudentById(rs.getString("StudentId")));
+                lista.add(a); // Add the Attendance object to the list
             }
         } catch (SQLException ex) {
             Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-            return listAttendance;
+        return lista;
+    }
+
+    public void updateAtt(String status, String sid, int sessionid) {
+        try {
+            String sql = "update Attendance \n"
+                    + "                    set Status = ? where StudentId = ? and sessionId = ?";
+
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, status);
+            stm.setString(2, sid);
+            stm.setInt(3, sessionid);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void updateStatusSession(int sid) {
+        try {
+            String sql = "		update Session \n"
+                    + "	set Status ='true'\n"
+                    + "	where SessionId = ?";
+            PreparedStatement stm =connection.prepareStatement(sql);
+            stm.setInt(1, sid);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

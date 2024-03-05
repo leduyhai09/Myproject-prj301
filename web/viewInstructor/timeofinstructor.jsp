@@ -119,14 +119,20 @@
                         <c:forEach items="${requestScope.dates}" var="d">
                             <td>                  
                                 <c:forEach items="${requestScope.sessions}" var="ses">
+                                    
                                     <c:if test="${(ses.date eq d) and (ses.slotId.tid eq slot.tid)}">
                                         ${ses.classId.className}<br> 
-                                        ${ses.classId.courseId.courseName} <br> 
-                                        ${ses.roomId.roomName} <br>
-                                        (${ses.attentId.status}) 
-                                        <a href="att?id=${ses.sessionId}">Take</a>
+                                        ${ses.roomId.roomName}
+                                       
+                                        <a href="att?slotid=${ses.slotId.tid}&date=${ses.date}&sessionid=${ses.sessionId}">
+                                            <c:if test="${ses.status eq 'false'}">Take</c:if>
+                                            <c:if test="${ses.status eq 'true'}">Edit</c:if>
+                                        
+                                        </a>
                                         <br>
-                                        ${ses.slotId.time}
+                                        (${ses.slotId.time})
+                                        <br>
+                                       
                                     </c:if>
                                 </c:forEach>
                             </td>
@@ -138,4 +144,3 @@
     </div>
 </body>
 </html>
-

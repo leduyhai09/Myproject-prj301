@@ -34,8 +34,9 @@
     <input type="date" name="to" value="${requestScope.to}"/>
     <input type="submit" value="View"/>
 </form>
-
+    
 <table>
+    
     <thead>
     <tr>
         <td></td> <!-- This cell is empty -->
@@ -61,14 +62,12 @@
             <td>${slot.tname}</td>
             <c:forEach items="${requestScope.dates}" var="d">
                 <td>
-                    <c:forEach items="${requestScope.sess}" var="ses">
-                        <c:if test="${(ses.date eq d) and (ses.slotId.tid eq slot.tid)}">
-                            ${ses.classId.className}<br> 
-                            ${ses.classId.courseId.courseName} <br> 
-                            ${ses.roomId.roomName} <br>
-                            (${ses.attentId.status}) 
-                            <br>
-                            ${ses.slotId.time}
+                    <c:forEach items="${requestScope.atts}" var="atts">
+                        <c:if test="${(atts.sessionId.date eq d) and (atts.sessionId.slotId.tid eq slot.tid)}">
+                            ${atts.sessionId.classId.courseId.courseName}<br> 
+                            ${atts.sessionId.roomId.roomName}
+                            (${atts.status})
+                            (${atts.sessionId.slotId.time})
                         </c:if>
                     </c:forEach>
                 </td>

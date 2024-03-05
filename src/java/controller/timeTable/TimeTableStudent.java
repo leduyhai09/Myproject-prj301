@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Account;
+import model.Attendance;
 import model.Session;
 import model.TimeSlot;
 import util.DateTimeHelper;
@@ -76,12 +77,12 @@ public class TimeTableStudent extends HttpServlet {
         List<TimeSlot> listsSlots = idbc.getListTimeSlots();
         request.setAttribute("listsSlots", listsSlots);
         
-         ArrayList<Session> sessionss = (ArrayList<Session>) idbc.getListSessionStudent("leduyhai", from,  to);
+         ArrayList<Attendance> sessionss = (ArrayList<Attendance>) idbc.getListSessionStudent("leduyhai", from,  to);
         request.setAttribute("from", from);
         request.setAttribute("to", to);
         request.setAttribute("username", username);
         request.setAttribute("dates", dates);
-        request.setAttribute("sess", sessionss);
+        request.setAttribute("atts", sessionss);
        request.getRequestDispatcher("view/timetablestudent.jsp").forward(request, response);
     } 
 

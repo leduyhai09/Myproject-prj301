@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Account;
+import model.Attendance;
 import model.Session;
 import model.TimeSlot;
 import util.DateTimeHelper;

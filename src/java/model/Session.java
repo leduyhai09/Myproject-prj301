@@ -16,9 +16,10 @@ public class Session {
     private Date date;
     private Room roomId;
     private Classs classId;
-    private Attendance attentId;
     private Instructor instructorId;
     private TimeSlot slotId;
+    private Student studentId;
+    private String status;
 
     public int getSessionId() {
         return sessionId;
@@ -43,15 +44,7 @@ public class Session {
     public void setClassId(Classs classId) {
         this.classId = classId;
     }
-
-    public Attendance getAttentId() {
-        return attentId;
-    }
-
-    public void setAttentId(Attendance attentId) {
-        this.attentId = attentId;
-    }
-
+    
     public Instructor getInstructorId() {
         return instructorId;
     }
@@ -76,4 +69,24 @@ public class Session {
         this.date = date;
     }
 
+    public Student getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Student studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+   
+    
+    
+    
 }

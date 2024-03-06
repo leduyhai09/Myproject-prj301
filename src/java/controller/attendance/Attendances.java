@@ -74,8 +74,10 @@ public class Attendances extends HttpServlet {
         ArrayList<Attendance> lista = (ArrayList<Attendance>) idbc.getAttendancesList(account.getUserName(), Integer.parseInt(slotId), date);
         for (Attendance attendance : lista) {
             String attstt = request.getParameter("att" + attendance.getStudentId().getStudentId());
-            idbc.updateAtt(attstt, attendance.getStudentId().getStudentId(),Integer.parseInt(sessionid));
-            
+            String comment = request.getParameter("comment" + attendance.getStudentId().getStudentId());
+            idbc.updateAtt(attstt,comment, attendance.getStudentId().getStudentId(),Integer.parseInt(sessionid));
+            System.out.print(attstt +" "+ attendance.getStudentId().getStudentId());
+            System.out.print(comment);
         }
         idbc.updateStatusSession(Integer.parseInt(sessionid));
         response.sendRedirect("instructor"); 

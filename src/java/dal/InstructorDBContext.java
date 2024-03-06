@@ -327,15 +327,16 @@ public class InstructorDBContext extends DBContext {
         return lista;
     }
 
-    public void updateAtt(String status, String sid, int sessionid) {
+    public void updateAtt(String status,  String comment,String sid, int sessionid) {
         try {
             String sql = "update Attendance \n"
-                    + "                    set Status = ? where StudentId = ? and sessionId = ?";
+                    + "                    set Status = ? , Comment = ? where StudentId = ? and sessionId = ?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, status);
-            stm.setString(2, sid);
-            stm.setInt(3, sessionid);
+            stm.setString(2, comment);
+            stm.setString(3, sid);
+            stm.setInt(4, sessionid);
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);

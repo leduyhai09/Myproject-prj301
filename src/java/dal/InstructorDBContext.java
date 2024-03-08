@@ -16,10 +16,14 @@ import model.Account;
 import model.Attendance;
 import model.Classs;
 import model.Course;
+import model.Course_Grade;
+import model.Grade;
 import model.Instructor;
 import model.Room;
 import model.Session;
 import model.Student;
+import model.Term;
+import model.Term_Course;
 
 /**
  *
@@ -231,6 +235,45 @@ public class InstructorDBContext extends DBContext {
         return null;
     }
 
+    public Term getTermById(int id) {
+        String sql = "select * from Term\n"
+                + "where Term.TermId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Term t = new Term();
+                t.setTermId(rs.getInt("TermId"));
+                t.setTermName(rs.getString("TermName"));
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public Grade getGradeById(int id) {
+        String sql = "select * from Grade\n"
+                + "where Grade.GradeId =?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                Grade g = new Grade();
+                g.setGradeId(rs.getInt("GradeId"));
+                g.setGradeName(rs.getString("GradeName"));
+                g.setValue(rs.getDouble("value"));
+                return g;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public List<Session> getSessions(String username, Date from, Date to) {
         List<Session> attaList = new ArrayList<>();
         String sql = "  select distinct session.SessionId, session.date,Session.ClassId, Session.RoomId, Session.instructorId,Session.SlotId, Session.Status  from Session\n"
@@ -268,16 +311,12 @@ public class InstructorDBContext extends DBContext {
 
     public List<Attendance> getListSessionStudent(String account, Date from, Date to) {
         List<Attendance> listTimeStudent = new ArrayList<>();
-        String sql = "select  Session.date, Attendance.ID ,attendance.status, Attendance.sessionId from Session\n"
-                + "                join Student\n"
-                + "                on Student.StudentId = Session.studentId\n"
-                + "                join Classs\n"
-                + "                on Session.ClassId = Classs.ClassId\n"
-                + "               join Course\n"
-                + "                on Course.CourseId = Classs.CourseId\n"
-                + "				join Attendance\n"
-                + "				on Attendance.sessionId = Session.SessionId\n"
-                + "                where Student.userName = ? and Session.date >=? and Session.date <= ?";
+        String sql = "select Attendance.StudentId, Attendance.sessionId,  Attendance.status from Attendance\n"
+                + "join Student\n"
+                + "on Attendance.StudentId = Student.StudentId\n"
+                + "join Session\n"
+                + "on Session.SessionId = Attendance.sessionId\n"
+                + "WHere Student.userName = ? and Session.date >= ? and Session.date <= ?";
         try {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, account);
@@ -286,10 +325,9 @@ public class InstructorDBContext extends DBContext {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Attendance a = new Attendance();
-                a.setAttentId(rs.getInt("ID"));
                 a.setStatus(rs.getString("status"));
                 a.setSessionId(getSessionById(rs.getInt("sessionId")));
-
+                a.setStudentId(getStudentById(rs.getString("StudentId")));
                 listTimeStudent.add(a);
             }
         } catch (SQLException ex) {
@@ -327,7 +365,7 @@ public class InstructorDBContext extends DBContext {
         return lista;
     }
 
-    public void updateAtt(String status,  String comment,String sid, int sessionid) {
+    public void updateAtt(String status, String comment, String sid, int sessionid) {
         try {
             String sql = "update Attendance \n"
                     + "                    set Status = ? , Comment = ? where StudentId = ? and sessionId = ?";
@@ -349,12 +387,80 @@ public class InstructorDBContext extends DBContext {
             String sql = "		update Session \n"
                     + "	set Status ='true'\n"
                     + "	where SessionId = ?";
-            PreparedStatement stm =connection.prepareStatement(sql);
+            PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, sid);
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public List<Term> getTerms() {
+        List<Term> listTerms = new ArrayList<>();
+        try {
+            String sql = "select * from Term";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Term t = new Term();
+                t.setTermId(rs.getInt("TermId"));
+                t.setTermName(rs.getString("TermName"));
+                listTerms.add(t);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listTerms;
+    }
+
+    public List<Term_Course> getTerm_Course(int termId) {
+        List<Term_Course> listtCourses = new ArrayList<>();
+        String sql = "select Term_Course.TermId, Term_Course.CourseId from term join \n"
+                + "term_course\n"
+                + "on Term.TermId = Term_Course.TermId\n"
+                + "join Course\n"
+                + "on Term_Course.CourseId  = Course.CourseId\n"
+                + "where Term_Course.TermId = ?";
+        try {
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, termId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Term_Course tc = new Term_Course();
+                tc.setCoureId(getCourseById(rs.getInt("CourseId")));
+                tc.setTermId(getTermById(rs.getInt("TermId")));
+                listtCourses.add(tc);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return listtCourses;
+    }
+
+    public List<Course_Grade> getListCourse_Grades(int courseId) {
+        List<Course_Grade> getListCourse_Grades = new ArrayList<>();
+        try {
+            String sql = "select Course_Grade.GradeId, Course_Grade.CourseId,Course_Grade.[Weight],Course_Grade.Comment from Grade\n"
+                    + "join Course_Grade\n"
+                    + "on Grade.GradeId = Course_Grade.GradeId\n"
+                    + "join Course\n"
+                    + "on Course.CourseId = Course_Grade.CourseId\n"
+                    + "where Course_Grade.CourseId=?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, courseId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Course_Grade g = new Course_Grade();
+                g.setCourseId(getCourseById(rs.getInt("CourseId")));
+                g.setGradeId(getGradeById(rs.getInt("GradeId")));
+                g.setWeight(rs.getDouble("Weight"));
+                g.setComment(rs.getString("Comment"));
+                getListCourse_Grades.add(g);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(InstructorDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return getListCourse_Grades;
     }
 
 }

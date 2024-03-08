@@ -65,8 +65,8 @@
                     <c:forEach items="${requestScope.atts}" var="atts">
                         <c:if test="${(atts.sessionId.date eq d) and (atts.sessionId.slotId.tid eq slot.tid)}">
                             ${atts.sessionId.classId.courseId.courseName}<br> 
-                            ${atts.sessionId.roomId.roomName}
-                            (${atts.status})
+                            ${atts.sessionId.roomId.roomName}<br>
+                            (${atts.status})<br>
                             (${atts.sessionId.slotId.time})
                         </c:if>
                     </c:forEach>

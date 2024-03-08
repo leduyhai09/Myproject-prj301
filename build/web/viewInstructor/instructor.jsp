@@ -48,7 +48,7 @@
     <h1 id="header">FPT University Academic Portal</h1>
     <div id="links">
         <a href="instructor">Time Table</a>
-        <a href="#">Teach Mark Report</a>
+        <a href="mark">Teach Mark Report</a>
     </div>
 </body>
 </html>

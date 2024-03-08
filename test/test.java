@@ -7,9 +7,13 @@ import model.Account;
 import model.Attendance;
 import model.Classs;
 import model.Course;
+import model.Course_Grade;
+import model.Grade;
 import model.Instructor;
 import model.Room;
 import model.Session;
+import model.Term;
+import model.Term_Course;
 import model.TimeSlot;
 
 /*
@@ -34,15 +38,18 @@ public class test {
 //        for (Attendance attendance : a) {
 //            System.out.println(attendance.getSessionId().getClassId().getClassName());
 //        }
-        List<Session> sessions = idbc.getSessions("sonnt5", java.sql.Date.valueOf("2024-02-28"),  java.sql.Date.valueOf("2024-02-29"));
-        for (Session session : sessions) {
-            System.out.println(session.getStatus());
-        }
-        List<Attendance> a = idbc.getAttendancesList("sonnt5",1,"2024-02-28");
-        for (Attendance attendance : a) {
-            System.out.println(attendance.getSessionId().getClassId().getClassName());
-        }
+        
 //    }
+        List<Attendance> a = idbc.getListSessionStudent("leduyhai",  java.sql.Date.valueOf("2024-01-15"),  java.sql.Date.valueOf("2024-03-30"));
+        for (Attendance attendance : a) {
+            System.out.println(attendance.getSessionId().getDate());
+        }
+
+        Term t = idbc.getTermById(4);
+        List<Course_Grade> c = idbc.getListCourse_Grades(3);
+        for (Course_Grade course_Grade : c) {
+            System.out.println(course_Grade.getGradeId().getGradeName());
+        }
     }
 }
 

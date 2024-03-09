@@ -13,6 +13,7 @@ public class Course_Grade {
     private Grade gradeId;
     private double weight;
     private String comment;
+    private double value;
 
     public Course getCourseId() {
         return courseId;
@@ -44,6 +45,14 @@ public class Course_Grade {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
     }
     
     

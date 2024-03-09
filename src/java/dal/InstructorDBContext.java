@@ -265,7 +265,6 @@ public class InstructorDBContext extends DBContext {
                 Grade g = new Grade();
                 g.setGradeId(rs.getInt("GradeId"));
                 g.setGradeName(rs.getString("GradeName"));
-                g.setValue(rs.getDouble("value"));
                 return g;
             }
         } catch (SQLException ex) {
@@ -440,7 +439,7 @@ public class InstructorDBContext extends DBContext {
     public List<Course_Grade> getListCourse_Grades(int courseId) {
         List<Course_Grade> getListCourse_Grades = new ArrayList<>();
         try {
-            String sql = "select Course_Grade.GradeId, Course_Grade.CourseId,Course_Grade.[Weight],Course_Grade.Comment from Grade\n"
+            String sql = "select Course_Grade.GradeId, Course_Grade.CourseId,Course_Grade.[Weight],Course_Grade.Comment,Course_Grade.Value from Grade\n"
                     + "join Course_Grade\n"
                     + "on Grade.GradeId = Course_Grade.GradeId\n"
                     + "join Course\n"
@@ -455,6 +454,7 @@ public class InstructorDBContext extends DBContext {
                 g.setGradeId(getGradeById(rs.getInt("GradeId")));
                 g.setWeight(rs.getDouble("Weight"));
                 g.setComment(rs.getString("Comment"));
+                g.setValue(rs.getDouble("value"));
                 getListCourse_Grades.add(g);
             }
         } catch (SQLException ex) {

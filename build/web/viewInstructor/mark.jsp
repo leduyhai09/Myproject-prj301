@@ -55,11 +55,14 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+            font-size: 16px;
         }
         th {
             background-color: #f2f2f2;
@@ -68,16 +71,73 @@
         .weight {
             text-align: center;
         }
+        .totalRow {
+            background-color: #f2f2f2;
+        }
+        .totalRow td {
+            font-weight: bold;
+        }
+        .statusRow {
+            font-weight: bold;
+        }
+        .pass {
+            color: green;
+        }
+        .notPass {
+            color: red;
+        }
     </style>
-    <script>
-        window.onload = function() {
-            var weightCells = document.querySelectorAll('.weight');
-            weightCells.forEach(function(cell) {
-                var weight = parseFloat(cell.textContent);
-                cell.textContent = (weight * 100).toFixed(1) + '%';
-            });
-        };
-    </script>
+ <script>
+    window.onload = function() {
+        var weightCells = document.querySelectorAll('.weight');
+        var valueCells = document.querySelectorAll('table td:nth-child(3)'); // Lấy tất cả các ô của cột VALUE
+        var totalValue = 0;
+
+        // Lặp qua từng ô trọng số và tính tổng giá trị
+        weightCells.forEach(function(cell, index) {
+            var weight = parseFloat(cell.textContent);
+            var value = parseFloat(valueCells[index].textContent); // Lấy giá trị từ ô tương ứng trong cột VALUE
+            var subtotal = weight * value;
+            totalValue += subtotal;
+
+            // Chuyển đổi trọng số sang phần trăm và cập nhật lại nội dung của ô
+            cell.textContent = (weight * 100).toFixed(1) + '%';
+        });
+
+        // Tạo và hiển thị dòng tổng giá trị
+        var totalRow = document.createElement('tr');
+        totalRow.classList.add('totalRow');
+
+        var totalTitleCell = document.createElement('td');
+        totalTitleCell.textContent = 'Total Value';
+        totalTitleCell.setAttribute('colspan', '3'); // Chỉ định ô này chiếm 3 cột
+        totalRow.appendChild(totalTitleCell);
+
+        var totalValueCell = document.createElement('td');
+        totalValueCell.textContent = Math.ceil(totalValue * 10) / 10; // Làm tròn tổng giá trị lên với một chữ số thập phân
+        totalRow.appendChild(totalValueCell);
+
+        // Kiểm tra điều kiện và hiển thị kết quả
+        var passStatusCell = document.createElement('td');
+        passStatusCell.classList.add('statusRow');
+        var finalExam = parseFloat("${finalExam}"); // Lấy giá trị của final exam từ biến JSP
+        if (Math.ceil(totalValue * 10) / 10 > 5 || finalExam < 4) {
+            passStatusCell.textContent = "Passed";
+            passStatusCell.classList.add('pass');
+        } else {
+            passStatusCell.textContent = "Not Passed";
+            passStatusCell.classList.add('notPass');
+        }
+        totalRow.appendChild(passStatusCell);
+
+        // Thêm dòng tổng vào cuối bảng
+        var table = document.querySelector('table');
+        table.appendChild(totalRow);
+    };
+</script>
+
+
+
 </head>
 <body>
 
@@ -108,7 +168,7 @@
             <tr>
                 <td>${cgs.gradeId.gradeName}</td>
                 <td class="weight">${cgs.weight}</td>
-                <td>${cgs.gradeId.value}</td>
+                <td>${cgs.value}</td>
                 <td>${cgs.comment}</td>
             </tr>
         </c:forEach>
@@ -117,4 +177,3 @@
 
 </body>
 </html>
-

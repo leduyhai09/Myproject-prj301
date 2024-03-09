@@ -11,7 +11,7 @@ package model;
 public class Grade {
     private int gradeId;
     private String gradeName;
-    private double value;
+ 
 
     public int getGradeId() {
         return gradeId;
@@ -29,13 +29,4 @@ public class Grade {
         this.gradeName = gradeName;
     }
 
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-    
-    
 }

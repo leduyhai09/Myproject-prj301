@@ -46,9 +46,9 @@ public class ControllerAccount extends HttpServlet {
         if (account != null) {
             sesion.setAttribute("account", account);
             if (account.getRole() == 1) {
-                request.getRequestDispatcher("view/student.jsp").forward(request, response);
+                response.sendRedirect("homestudent");
             } else if (account.getRole() == 2) {
-                request.getRequestDispatcher("viewInstructor/instructor.jsp").forward(request, response);
+               response.sendRedirect("homeinstructor");
             }
         } else {
             sesion.setAttribute("error", "Login failed!! Please check your username and password");

@@ -1,10 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-         version="6.0">
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet-mapping>
+        <servlet-name>Send</servlet-name>
+        <url-pattern>/email</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>controller_home</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControllerHomeInstructor</servlet-name>
+        <url-pattern>/homeinstructor</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>10</session-timeout>
     </session-config>
+    <servlet>
+        <servlet-name>Send</servlet-name>
+        <servlet-class>controller.SendEmail.Send</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>controller_home</servlet-name>
+        <servlet-class>controller.home.controller_home</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControllerHomeInstructor</servlet-name>
+        <servlet-class>controller.home.ControllerHomeInstructor</servlet-class>
+    </servlet>
+    <display-name>web</display-name>
+    <!-- SMTP settings -->
+    <context-param>
+        <param-name>host</param-name>
+        <param-value>smtp.gmail.com</param-value>
+    </context-param>
+    <context-param>
+        <param-name>port</param-name>
+        <param-value>587</param-value>
+    </context-param>
+    <context-param>
+        <param-name>user</param-name>
+        <param-value>haildhe172452@fpt.edu.vn</param-value>
+    </context-param>
+    <context-param>
+        <param-name>pass</param-name>
+        <param-value>uaer fifu qyzq txoj</param-value>
+    </context-param>
+    <welcome-file-list>
+        <welcome-file>EmailForm.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

@@ -16,6 +16,8 @@ public class Student {
     private boolean gender;
     private Date dob;
     private Account account;
+    private String email;
+           
 
     public Student() {
     }
@@ -65,6 +67,14 @@ public class Student {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     

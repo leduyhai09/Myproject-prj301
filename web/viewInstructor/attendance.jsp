@@ -1,4 +1,4 @@
-<%-- 
+ <%-- 
     Document   : attendance
     Created on : Mar 3, 2024, 11:24:22 PM
     Author     : ADMIN
@@ -85,6 +85,7 @@
             <c:forEach items="${requestScope.lista}" var="s" varStatus="loop">
                 <tr>
                     <td>${loop.index + 1}</td>
+                <input type="hidden" name="course-${s.studentId.studentId}" value="${s.sessionId.classId.courseId.courseName}" />
                     <td>${s.sessionId.classId.className}</td>
                     <td>${s.studentId.studentId}</td>
                     <td>${s.studentId.studentName}</td>

@@ -227,6 +227,7 @@ public class InstructorDBContext extends DBContext {
                 s.setGender(rs.getBoolean("Gender"));
                 s.setDob(rs.getDate("Dob"));
                 s.setAccount(getAccountById("username"));
+                s.setEmail(rs.getString("email"));
                 return s;
             }
         } catch (SQLException ex) {
@@ -356,6 +357,7 @@ public class InstructorDBContext extends DBContext {
                 a.setStatus(rs.getString("Status"));
                 a.setComment(rs.getString("comment"));
                 a.setStudentId(getStudentById(rs.getString("StudentId")));
+                
                 lista.add(a); // Add the Attendance object to the list
             }
         } catch (SQLException ex) {

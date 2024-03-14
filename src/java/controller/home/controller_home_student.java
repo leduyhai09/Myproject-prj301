@@ -12,6 +12,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Account;
 
 /**
  *
@@ -33,7 +35,13 @@ public class controller_home_student extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account a = (Account) session.getAttribute("account");
+        if(a != null){
         request.getRequestDispatcher("view/student.jsp").forward(request, response);
+        }else{
+            response.getWriter().print("access denied");
+        }
     } 
 
     /** 

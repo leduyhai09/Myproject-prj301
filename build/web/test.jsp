@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>${requestScope.t}</h1>
+        <h1>${requestScope.attHE161942}</h1>
     </body>
 </html>

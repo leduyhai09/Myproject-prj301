@@ -6,7 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -24,6 +23,9 @@
             text-align: center;
             padding: 20px 0;
             margin-bottom: 20px;
+            font-size: 24px;
+            /* Change the color property */
+            color: #28a745; /* Green color */
         }
         #links {
             text-align: center;
@@ -31,12 +33,13 @@
         #links a {
             display: inline-block;
             margin: 0 10px;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #007bff;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            font-size: 18px;
         }
         #links a:hover {
             background-color: #0056b3;
@@ -44,12 +47,11 @@
     </style>
 </head>
 <body>
+    <div id="header">FPT University Academic Portal</div>
     <h1>${requestScope.t}</h1>
-    <h1 id="header">FPT University Academic Portal</h1>
     <div id="links">
         <a href="instructor">Time Table</a>
         <a href="mark">Teach Mark Report</a>
     </div>
 </body>
 </html>
-

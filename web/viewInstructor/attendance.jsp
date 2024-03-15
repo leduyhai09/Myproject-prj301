@@ -1,4 +1,4 @@
- <%-- 
+<%-- 
     Document   : attendance
     Created on : Mar 3, 2024, 11:24:22 PM
     Author     : ADMIN
@@ -8,7 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -85,13 +85,12 @@
             <c:forEach items="${requestScope.lista}" var="s" varStatus="loop">
                 <tr>
                     <td>${loop.index + 1}</td>
-                <input type="hidden" name="course-${s.studentId.studentId}" value="${s.sessionId.classId.courseId.courseName}" />
                     <td>${s.sessionId.classId.className}</td>
                     <td>${s.studentId.studentId}</td>
                     <td>${s.studentId.studentName}</td>
                     <td>
-                        absent <input type="radio" name="att${s.studentId.studentId}" value="absent"    <c:if test="${s.status eq 'absent'}">checked</c:if>/>
-                        present <input type="radio" name="att${s.studentId.studentId}" value="present"  <c:if test="${s.status eq 'present'}">checked</c:if>/>
+                        <label><input type="radio" name="att${s.studentId.studentId}" value="absent" <c:if test="${s.status eq 'absent'}">checked</c:if>> Absent</label>
+                        <label><input type="radio" name="att${s.studentId.studentId}" value="present" <c:if test="${s.status eq 'present'}">checked</c:if>> Present</label>
                     </td>
                     <td><input name="comment${s.studentId.studentId}" type="text" value ="${s.comment}"/></td>
                 </tr> 

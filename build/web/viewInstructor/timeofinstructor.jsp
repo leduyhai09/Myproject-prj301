@@ -83,7 +83,7 @@
     </style>
 </head>
 <body>
-
+    <h1><a href="homeinstructor">Back</a></h1>
     <div class="container">
         <h1>Timetable</h1>
         <form action="instructor" method="GET">

@@ -68,6 +68,7 @@
 </style>
 </head>
 <body>
+    <h1><a href="instructor">Back</a></h1>
     <form action="att" method="post">
         <input type="hidden" value="${requestScope.slotid}" name="slotid"/>
         <input type="hidden" value="${requestScope.date}" name="date"/>

@@ -94,12 +94,10 @@ public class Attendances extends HttpServlet {
                 String attstt = request.getParameter("att" + attendance.getStudentId().getStudentId());
                 String comment = request.getParameter("comment" + attendance.getStudentId().getStudentId());
                 idbc.updateAtt(attstt, comment, attendance.getStudentId().getStudentId(), Integer.parseInt(sessionid));
-                System.out.print(attstt + " " + attendance.getStudentId().getStudentId());
-                System.out.print(comment);
 
                 if (attstt.equals("absent")) {
                     String course = request.getParameter("course-" + attendance.getStudentId().getStudentId()); // Lấy môn học của sinh viên
-                    String emailContent = "You missed " + course + " today"  ; // Nội dung email có thể được tạo dựa trên môn học
+                    String emailContent = "You missed " + course + " today"  ; // Nội dung ema   il có thể được tạo dựa trên môn học
                     EmailUtility.sendEmail(host, port, user, pass, attendance.getStudentId().getEmail(), "Subject for " + course, emailContent);
                 }
             } catch (MessagingException ex) {
